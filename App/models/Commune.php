@@ -31,7 +31,7 @@
 
         public function getBilan(){
             try{
-                $stmt = $this->conn->prepare("SELECT c.intituleCommune, COUNT(p.cnieProprietaire) AS nb, SUM(a.montant) as totalParCommune
+                $stmt = $this->conn->prepare("SELECT c.idCommune, c.intituleCommune, COUNT(DISTINCT p.cnieProprietaire) AS nb, SUM(a.montant) as totalParCommune
                 FROM communes as c
                 INNER JOIN proprietaires AS p
                     ON c.idCommune = p.idCommune
@@ -40,6 +40,22 @@
                 GROUP BY c.idCommune");
 
                 $stmt->execute();
+                return $stmt;
+            }
+            catch(PDOException $e){
+                throw new PDOException("Erreur lors de la récupération des information");
+            }
+        }
+
+        public function getbonAide(int $idCommune):PDOStatement{
+            try{
+                $stmt = $this->conn->prepare("SELECT p.cnieProprietaire, p.nom, p.prenom, p.adresse, p.tel, a.date, a.montant, a.percue
+                    FROM proprietaires p 
+                    INNER JOIN communes c ON p.idCommune = c.idCommune 
+                    INNER JOIN aideLogements a ON p.cnieProprietaire = a.cnieProprietaire
+                    WHERE c.idCommune = ?
+                ");
+                $stmt->execute([$idCommune]);
                 return $stmt;
             }
             catch(PDOException $e){

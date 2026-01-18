@@ -27,6 +27,17 @@
 </head>
 <body>
     <div class = "container mt-4">
+        <?php if (isset($_SESSION['success'])): ?>
+                <div class="alert alert-success">
+                    <?= $_SESSION['success']; unset($_SESSION['success']); ?>
+                </div>
+            <?php endif; ?>
+
+            <?php if (isset($_SESSION['erreur'])): ?>
+                <div class="alert alert-danger">
+                    <?= $_SESSION['erreur']; unset($_SESSION['erreur']); ?>
+                </div>
+        <?php endif; ?> 
         <div class = "card card-body shadow-sm p-3">
             <h3 class = "text-center text-primary fw-bold mb-3">BILAN DES AIDES</h3>
             <div class = "table-responsive">
@@ -36,6 +47,7 @@
                             <th>Commune</th>
                             <th>Nombre de propriétaire bénéficiaire</th>
                             <th>Montant Global (dh)</th>
+                            <th>exportation</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -46,6 +58,7 @@
                                 <td><?= $ligne->intituleCommune ?? '-' ?></td>
                                 <td><?= $ligne->nb ?? '-' ?></td>
                                 <td><?= $ligne->totalParCommune ?? '-' ?></td>
+                                <td><a class = "btn btn-sm btn-primary" href="exportationXMl.php?idCommune=<?= $ligne->idCommune;?>" ?>Exporter</a></td>
                             </tr>
                         <?php endwhile; ?>
                         <?php if($empty): ?>
