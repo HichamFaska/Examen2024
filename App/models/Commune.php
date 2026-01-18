@@ -28,4 +28,22 @@
                 throw new PDOException("Erreur lors de la récupération de la liste des communes");
             }
         }
+
+        public function getBilan(){
+            try{
+                $stmt = $this->conn->prepare("SELECT c.intituleCommune, COUNT(p.cnieProprietaire) AS nb, SUM(a.montant) as totalParCommune
+                FROM communes as c
+                INNER JOIN proprietaires AS p
+                    ON c.idCommune = p.idCommune
+                INNER JOIN aidelogements AS a
+                    ON a.cnieProprietaire = p.cnieProprietaire
+                GROUP BY c.idCommune");
+
+                $stmt->execute();
+                return $stmt;
+            }
+            catch(PDOException $e){
+                throw new PDOException("Erreur lors de la récupération des information");
+            }
+        }
     }

@@ -43,7 +43,7 @@
                 return $stmt;
             }
             catch(PDOException $e){
-                throw new PDOException("Erreur lors de la récupération de la liste des communes");
+                throw new PDOException("Erreur lors de la récupération de la liste des propriétaire");
             }
         }
 
@@ -59,7 +59,7 @@
                 return $stmt;
             }
             catch(PDOException $e){
-                throw new PDOException("Erreur lors de la récupération de la liste des communes");
+                throw new PDOException("Erreur lors de la récupération de la liste des propriétaire par communes");
             }
         }
     }
