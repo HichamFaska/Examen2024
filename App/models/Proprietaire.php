@@ -3,6 +3,7 @@
     use App\Database\Database;
     use PDO;
     use PDOException;
+    use PDOStatement;
 
     class Proprietaire{
         private PDO $conn;
@@ -32,6 +33,33 @@
             }
             catch(PDOException $e){
                 throw new PDOException("Erreur lors de la création d'un propriétaire");
+            }
+        }
+
+        public function getAll():PDOStatement{
+            try{
+                $stmt = $this->conn->prepare("SELECT * FROM proprietaires WHERE etatMaison = 2");
+                $stmt->execute();
+                return $stmt;
+            }
+            catch(PDOException $e){
+                throw new PDOException("Erreur lors de la récupération de la liste des communes");
+            }
+        }
+
+        public function getByCommune(string $commune):PDOStatement{
+            try{
+                $stmt = $this->conn->prepare("SELECT p.*
+                    FROM proprietaires AS p
+                    INNER JOIN communes as c
+                        ON c.idCommune = p.idCommune
+                    WHERE c.intituleCommune = :commune
+                    AND p.etatMaison = 2");
+                $stmt->execute([':commune' => $commune]);
+                return $stmt;
+            }
+            catch(PDOException $e){
+                throw new PDOException("Erreur lors de la récupération de la liste des communes");
             }
         }
     }
