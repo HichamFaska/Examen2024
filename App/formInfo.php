@@ -3,6 +3,12 @@
     require "../Autoload.php";
     Autoload::register();
     use App\Models\Commune;
+
+    if (!isset($_COOKIE['cnieAdmin']) || !isset($_COOKIE['nomAdmin'])) {
+        header("Location: authAdmin.php");
+        exit;
+    }
+
     try{
         $stmt = (new Commune())->getAll();
     }
